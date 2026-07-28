@@ -6,7 +6,6 @@ spring:
     problem-details:
       enabled: true
 
-  # Configuração do PostgreSQL dinâmica para suportar Nuvem e Local
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/chat_db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
@@ -22,9 +21,12 @@ spring:
       hibernate:
         format_sql: true
 
-  # Configuração do Kafka dinâmica
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    properties:
+      security.protocol: ${SPRING_KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+      sasl.mechanism: ${SPRING_KAFKA_SASL_MECHANISM:}
+      sasl.jaas.config: ${SPRING_KAFKA_JAAS_CONFIG:}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
