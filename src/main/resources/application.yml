@@ -1,3 +1,7 @@
+server:
+  port: ${PORT:8080}
+  address: 0.0.0.0
+
 spring:
   application:
     name: nexora-backend
@@ -15,8 +19,8 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: ${SPRING_JPA_SHOW_SQL:false}
     properties:
       hibernate:
         format_sql: true
@@ -27,13 +31,24 @@ spring:
       security.protocol: ${SPRING_KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
       sasl.mechanism: ${SPRING_KAFKA_SASL_MECHANISM:}
       sasl.jaas.config: ${SPRING_KAFKA_JAAS_CONFIG:}
+
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
     consumer:
       group-id: chat-group
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "*"
+        spring.json.trusted.packages: "com.project.chat.message.dto"
+
+app:
+  cors:
+    allowed-origin-patterns: ${APP_CORS_ALLOWED_ORIGIN_PATTERNS:http://localhost:5173}
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET}
