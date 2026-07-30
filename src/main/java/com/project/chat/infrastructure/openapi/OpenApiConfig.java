@@ -17,9 +17,9 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(new Info()
-                        .title("Chat API")
+                        .title("NEXORA API")
                         .version("1.0")
-                        .description("Real-time Chat API com Kafka e WebSockets"))
+                        .description("API de comunicação em tempo real da NEXORA com Kafka e WebSockets"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()

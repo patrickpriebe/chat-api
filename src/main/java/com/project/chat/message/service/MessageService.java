@@ -30,8 +30,8 @@ public class MessageService {
     private final KafkaTemplate<String, MessageResponseDTO> kafkaTemplate;
 
     @Transactional
-    public MessageResponseDTO saveMessage(MessageRequestDTO dto) {
-        User sender = userRepository.findById(dto.senderId())
+    public MessageResponseDTO saveMessage(MessageRequestDTO dto, String authenticatedEmail) {
+        User sender = userRepository.findByEmail(authenticatedEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("Sender not found"));
 
         Room room = roomRepository.findById(dto.roomId())
@@ -59,7 +59,17 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public List<MessageResponseDTO> getRoomHistory(UUID roomId) {
+    public List<MessageResponseDTO> getRoomHistory(UUID roomId, String authenticatedEmail) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
+
+        boolean isMember = room.getMembers().stream()
+                .anyMatch(member -> member.getEmail().equals(authenticatedEmail));
+
+        if (!isMember) {
+            throw new BusinessRuleException("User is not a member of this room");
+        }
+
         return messageRepository.findByRoomIdOrderByTimestampAsc(roomId).stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());

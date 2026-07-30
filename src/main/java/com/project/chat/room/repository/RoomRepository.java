@@ -12,4 +12,6 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
 
     @Query("SELECT r FROM Room r JOIN r.members m WHERE m.id = :userId")
     List<Room> findAllByMemberId(@Param("userId") UUID userId);
+
+    boolean existsByIdAndMembers_Email(UUID id, String email);
 }

@@ -8,9 +8,6 @@ public record MessageRequestDTO(
         @NotBlank(message = "Content cannot be empty")
         String content,
 
-        @NotNull(message = "Sender ID is required")
-        UUID senderId,
-
         @NotNull(message = "Room ID is required")
         UUID roomId
 ) {}

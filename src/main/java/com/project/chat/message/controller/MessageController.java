@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,14 +21,20 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping
-    public ResponseEntity<MessageResponseDTO> sendMessage(@RequestBody @Valid MessageRequestDTO dto) {
-        MessageResponseDTO response = messageService.saveMessage(dto);
+    public ResponseEntity<MessageResponseDTO> sendMessage(
+            @RequestBody @Valid MessageRequestDTO dto,
+            Principal principal
+    ) {
+        MessageResponseDTO response = messageService.saveMessage(dto, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/room/{roomId}")
-    public ResponseEntity<List<MessageResponseDTO>> getRoomHistory(@PathVariable UUID roomId) {
-        List<MessageResponseDTO> history = messageService.getRoomHistory(roomId);
+    public ResponseEntity<List<MessageResponseDTO>> getRoomHistory(
+            @PathVariable UUID roomId,
+            Principal principal
+    ) {
+        List<MessageResponseDTO> history = messageService.getRoomHistory(roomId, principal.getName());
         return ResponseEntity.ok(history);
     }
 }

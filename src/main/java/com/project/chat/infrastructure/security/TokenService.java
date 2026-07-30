@@ -15,15 +15,17 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    @Value("${api.security.token.secret:default-secret-key-chat-project}")
+    @Value("${api.security.token.secret:default-secret-key-nexora-project}")
     private String secret;
 
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withIssuer("chat-api")
+                    .withIssuer("nexora-api")
                     .withSubject(user.getEmail())
+                    .withClaim("userId", user.getId().toString())
+                    .withClaim("username", user.getUsername())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
@@ -35,7 +37,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer("chat-api")
+                    .withIssuer("nexora-api")
                     .build()
                     .verify(token)
                     .getSubject();

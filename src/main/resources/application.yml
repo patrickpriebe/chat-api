@@ -1,6 +1,6 @@
 spring:
   application:
-    name: chat-backend
+    name: nexora-backend
 
   mvc:
     problem-details:

@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -20,19 +20,17 @@ public class RoomController {
     private final RoomService roomService;
 
     @PostMapping
-    public ResponseEntity<RoomResponseDTO> createRoom(@RequestBody @Valid RoomRequestDTO dto) {
-        RoomResponseDTO response = roomService.createRoom(dto);
+    public ResponseEntity<RoomResponseDTO> createRoom(
+            @RequestBody @Valid RoomRequestDTO dto,
+            Principal principal
+    ) {
+        RoomResponseDTO response = roomService.createRoom(dto, principal.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<RoomResponseDTO>> getUserRooms(@PathVariable UUID userId) {
-        List<RoomResponseDTO> rooms = roomService.getUserRooms(userId);
+    @GetMapping("/me")
+    public ResponseEntity<List<RoomResponseDTO>> getCurrentUserRooms(Principal principal) {
+        List<RoomResponseDTO> rooms = roomService.getCurrentUserRooms(principal.getName());
         return ResponseEntity.ok(rooms);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<RoomResponseDTO>> getAllRooms() {
-        return ResponseEntity.ok(roomService.getAllRooms());
     }
 }

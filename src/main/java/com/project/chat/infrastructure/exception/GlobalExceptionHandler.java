@@ -16,7 +16,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleResourceNotFound(ResourceNotFoundException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problemDetail.setTitle("Resource Not Found");
-        problemDetail.setType(URI.create("https://api.chat.com/errors/not-found"));
+        problemDetail.setType(URI.create("urn:nexora:error:not-found"));
         problemDetail.setProperty("timestamp", Instant.now());
 
         return problemDetail;
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleBusinessRule(BusinessRuleException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
         problemDetail.setTitle("Business Rule Violation");
-        problemDetail.setType(URI.create("https://api.chat.com/errors/business-rule"));
+        problemDetail.setType(URI.create("urn:nexora:error:business-rule"));
         problemDetail.setProperty("timestamp", Instant.now());
 
         return problemDetail;
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ProblemDetail handleBadCredentials(Exception ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         problemDetail.setTitle("Authentication Failed");
-        problemDetail.setType(URI.create("https://api.chat.com/errors/unauthorized"));
+        problemDetail.setType(URI.create("urn:nexora:error:unauthorized"));
         problemDetail.setProperty("timestamp", Instant.now());
 
         return problemDetail;

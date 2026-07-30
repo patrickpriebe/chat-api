@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,16 +25,22 @@ public class RoomService {
     private final UserRepository userRepository;
 
     @Transactional
-    public RoomResponseDTO createRoom(RoomRequestDTO dto) {
+    public RoomResponseDTO createRoom(RoomRequestDTO dto, String creatorEmail) {
+        User creator = userRepository.findByEmail(creatorEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
+
         List<User> members = userRepository.findAllById(dto.memberIds());
         if (members.size() != dto.memberIds().size()) {
             throw new ResourceNotFoundException("One or more users provided for the room do not exist");
         }
 
+        Set<User> roomMembers = new HashSet<>(members);
+        roomMembers.add(creator);
+
         Room room = Room.builder()
                 .name(dto.name())
                 .type(dto.type())
-                .members(Set.copyOf(members))
+                .members(roomMembers)
                 .build();
 
         room = roomRepository.save(room);
@@ -42,15 +48,11 @@ public class RoomService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoomResponseDTO> getUserRooms(UUID userId) {
-        return roomRepository.findAllByMemberId(userId).stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
-    }
+    public List<RoomResponseDTO> getCurrentUserRooms(String authenticatedEmail) {
+        User user = userRepository.findByEmail(authenticatedEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
 
-    @Transactional(readOnly = true)
-    public List<RoomResponseDTO> getAllRooms() {
-        return roomRepository.findAll().stream()
+        return roomRepository.findAllByMemberId(user.getId()).stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
