@@ -1,8 +1,8 @@
-**# ⚙️ NEXORA - API RESTful (Back-end)
+# ⚙️ NEXORA - API RESTful (Back-end)
 
 > **Esta é a API que alimenta o sistema. [Acesse o repositório da Interface (UI) aqui](https://github.com/patrickpriebe/chat-ui)**
 
-O NEXORA é um sistema full-stack de comunicação em tempo real. Este repositório contém a API RESTful, desenvolvida em Java 21 com Spring Boot 3 sob os princípios de Clean Code, arquitetura em camadas, orientação a domínios e rigorosa separação de responsabilidades entre Controllers, Services, Repositories, DTOs, Entities e Enums.
+O NEXORA é um sistema full-stack de comunicação em tempo real. Este repositório contém a API RESTful, desenvolvida em Java Spring Boot sob os princípios de Clean Code, arquitetura em camadas, orientação a domínios e rigorosa separação de responsabilidades entre Controllers, Services, Repositories, DTOs, Entities e Enums.
 
 O projeto garante alta manutenibilidade, utilizando Spring Security com JWT para autenticação stateless, BCrypt para proteção de senhas, Bean Validation para validação declarativa e tratamento centralizado de erros (@RestControllerAdvice) no padrão RFC 9457. A comunicação e o processamento assíncrono são o coração da aplicação, orquestrados através de Apache Kafka, WebSocket, STOMP e SockJS para a entrega instantânea de mensagens.
 
@@ -44,4 +44,4 @@ Desenvolvido por: **Patrick Priebe**
 
 Desenvolvedor de Software, apaixonado por código limpo, arquitetura back-end e interfaces que fogem do comum.
 
-🔗 [LinkedIn](https://www.linkedin.com/in/patrickpriebe/) | 💻 [GitHub](https://github.com/patrickpriebe)**
+🔗 [LinkedIn](https://www.linkedin.com/in/patrickpriebe/) | 💻 [GitHub](https://github.com/patrickpriebe)
